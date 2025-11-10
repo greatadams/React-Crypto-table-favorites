@@ -1,22 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useMemo } from "react";
 import { useFavorites } from "../Components/FavouriteContext";
 import fetchCoins from "../services/coingecko";
 import CoinsTable from "../Components/CoinsTable";
 import { Link } from "react-router-dom";
+import Header from "../Components/Header";
+
 const Portforlio = () => {
     const {favs,toggle}=useFavorites();
     const [coins,setCoins]=useState([])
     const [loading, setLoading] = useState(false);
+   
     useEffect(()=>{
-        if(!favs.size){
-            setCoins([]);
-            return
-        }
-        setLoading(true); // ← Start loading
-        fetchCoins({ ids: [...favs], perPage: 250, page: 1 })
-        .then(setCoins)
-        .catch(console.error)
-    },[favs])
+    if(!favs.size){
+        setCoins([]);
+        return
+    }
+    setLoading(true);
+    fetchCoins({ ids: [...favs], perPage: 250, page: 1 })
+    .then((data) => {
+        setCoins(data);
+        setLoading(false);  // ← Turn off loading when done
+    })
+    .catch((err) => {
+        console.error(err);
+        setLoading(false);  // ← Turn off loading on error too
+    })
+},[favs])
 
      // Memoized formatters
     const fmtMoney = useMemo(() => 
@@ -58,10 +67,10 @@ const Portforlio = () => {
   
     return ( 
         <>
-       <div className="nav">
-       <div className="brand">Cryptoßuzz</div>
-       </div>
-
+     <Header 
+    sortBy="market_cap_desc"
+    onSortChange={() => {}}
+   />
       
        <CoinsTable 
         coins={coins} 

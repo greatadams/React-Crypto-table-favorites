@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 const Header = ({coins,sortBy,limit,onLimitChange,onSortChange}) => {
   //search function
@@ -5,9 +6,14 @@ const Header = ({coins,sortBy,limit,onLimitChange,onSortChange}) => {
     return (
  
          <nav className="nav">
-            <div className="brand">Cryptoßuzz</div>
+            <Link to="/" className="brand">Cryptoßuzz</Link>
 
-           <div className="controls">
+            <div className="portforlio">
+               <Link to="/">Home</Link>
+               <Link to="/portfolio">Portfolio</Link>
+            </div>
+
+            <div className="controls">
             <div className="sort">
              <label htmlFor="sortBy" className="sort__label">Sort By</label>
             <select 
